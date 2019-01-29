@@ -1,0 +1,37 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Name: {{ author.first_name }} {{ author.last_name }}</h1>
+
+  <p>Born: {{ author.date_of_birth }}        Died: {{ author.date_of_death }} </p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Books</h4>
+
+    {% for bid in author.book_set.all %}
+      <div style="margin-left:20px;margin-top:20px">
+        <h4>Book title: {{bid.title}}</h4>
+        <hr>
+        <p>Summary: {{bid.summary}}</p>
+        <p>ISBN: {{bid.isbn}}</p>
+        <p>Language: {{bid.language}}</p>
+        <p>Genre: {{bid.display_genre}}</p>
+        <div style="margin-left:20px;margin-top:20px">
+          <h5>Copies</h5>
+
+          {% for cid in bid.bookinstance_set.all %}
+            <hr>
+            <p class="{% if cid.status == 'a' %}text-success{% elif cid.status == 'm' %}text-danger{% else %}text-warning{% endif %}">{{ cid.get_status_display }}</p>
+            {% if cid.status != 'a' %}
+              <p><strong>Due to be returned:</strong> {{cid.due_back}}</p>
+              {% endif %}
+              <p><strong>Imprint:</strong> {{cid.imprint}}</p>
+              <p class="text-muted"><strong>Id:</strong> {{cid.id}}</p>
+              {% endfor %}
+              <div style="margin-left:20px;margin-top:20px">
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+{% endblock %}
